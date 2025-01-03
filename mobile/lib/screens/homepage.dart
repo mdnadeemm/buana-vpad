@@ -8,6 +8,12 @@ import 'package:url_launcher/url_launcher.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  Future<void> _launchUrl(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   void _showAboutDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -172,12 +178,7 @@ class HomePage extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton.icon(
-        onPressed: () async {
-          final uri = Uri.parse(url);
-          if (await canLaunchUrl(uri)) {
-            await launchUrl(uri);
-          }
-        },
+        onPressed: () => _launchUrl(Link.windowsDownload.path),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.blue[400],
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),

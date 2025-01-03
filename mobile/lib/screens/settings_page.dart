@@ -282,7 +282,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     Icons.launch,
                     color: Colors.blue,
                   ),
-                  onTap: () => _launchUrl('YOUR_LICENSE_URL'),
+                  onTap: () => _launchUrl(Link.license.path),
                 ),
                 _buildListTile(
                   title: 'Version',

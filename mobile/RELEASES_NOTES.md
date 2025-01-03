@@ -1,6 +1,12 @@
-# BuanaVPad Mobile v1.0.1 Release Notes
+# BuanaVPad Mobile v1.0.2 Release Notes
 
-We're excited to announce our first update to BuanaVPad Mobile! This release focuses on improving performance and reliability.
+We're excited to announce our latest update to BuanaVPad Mobile! This release focuses on improving external link functionality and overall stability.
+
+## What's New in 1.0.2
+
+🔗 **External Link Improvements**
+- Fixed URL launching functionality for external links
+- Enhanced reliability when opening documentation and support links
 
 ## What's New in 1.0.1
 
