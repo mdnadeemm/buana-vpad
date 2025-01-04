@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
         self.init_ui()
         self.setup_styles()
         self.connect_events()
-
+    
     def init_ui(self):
         self.setWindowTitle("BuanaVPad")
         self.setMinimumSize(900, 700)
@@ -155,6 +155,11 @@ class MainWindow(QMainWindow):
             }
         """)
 
+    def reset_remote_server(self):
+        """Reset remote server instance when error occurs"""
+        from src.core.remote_server_model import RemoteUvicornServer  # Import di sini untuk avoid circular import
+        self.remote_server = RemoteUvicornServer()
+    
     def connect_events(self):
         # Local server events
         server_events.server_error.connect(self.handle_server_error)
@@ -306,6 +311,7 @@ class MainWindow(QMainWindow):
         try:
             await self.local_server.stop()
         except Exception as e:
+            print("YAHAHA ERROR")
             server_events.emit_server_error(str(e))
 
     async def start_remote_server(self):

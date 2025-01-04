@@ -83,15 +83,26 @@ def create_app(unique_id: str):
                 "device_id": DEVICE_ID
             }))
             
-            asyncio.create_task(handle_remote_messages())
+            message_handler = asyncio.create_task(handle_remote_messages())
+            
+            # Yang penting: yield harus tetap dieksekusi meski ada error
             yield
             
+            # Cancel message handler saat shutdown
+            if not message_handler.done():
+                message_handler.cancel()
+                
         except Exception as e:
             remote_server_events.emit_remote_server_error(str(e))
+            # Tetap yield untuk handle error case
+            yield
         finally:
+            # Cleanup
             if remote_ws:
                 await remote_ws.close()
             remote_ws = None
+            # Clear manager state juga
+            await remote_controller_manager.clear()
             remote_server_events.emit_remote_log("Remote connection closed")
 
     app = FastAPI(title=f"{settings.APP_NAME}-Remote", lifespan=lifespan)

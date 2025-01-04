@@ -72,7 +72,6 @@ BuanaVPad is a desktop application that allows you to use your mobile phone as a
 - Check your network stability
 
 ## Coming Soon
-- Remote Server functionality for non-local connections
 - More controller customization options
 - Advanced mapping features
 

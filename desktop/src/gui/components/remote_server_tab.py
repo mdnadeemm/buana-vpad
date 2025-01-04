@@ -266,31 +266,42 @@ class RemoteServerTab(QWidget):
     def generate_qr_code(self, unique_id: str):
         try:
             # Generate connection string
-            conn_string = f"{settings.REMOTE_SERVER}/ws/{unique_id}"
+            conn_string = f"{unique_id}"
             
-            # Create QR code
+            # Create QR code dengan size lebih besar
             qr = qrcode.QRCode(
                 version=1,
                 error_correction=qrcode.constants.ERROR_CORRECT_L,
-                box_size=10,
-                border=4,
+                box_size=12,  # Increase box size
+                border=2,     # Less border
             )
             qr.add_data(conn_string)
             qr.make(fit=True)
 
-            # Create image
-            img = qr.make_image(fill_color="white", back_color="transparent")
+            # Create image dengan warna hitam-putih
+            img = qr.make_image(fill_color="black", back_color="white")
             
-            # Convert to QPixmap
+            # Convert ke QPixmap dengan resolusi lebih tinggi
             buffer = BytesIO()
-            img.save(buffer, format='PNG')
+            img.save(buffer, format='PNG', quality=95)  # Higher quality
             qimage = QImage.fromData(buffer.getvalue())
             pixmap = QPixmap.fromImage(qimage)
             
-            # Scale to reasonable size
-            pixmap = pixmap.scaledToWidth(200, Qt.TransformationMode.SmoothTransformation)
+            # Skala ke ukuran lebih besar dengan antialiasing
+            desired_size = 300  # Bigger size
+            pixmap = pixmap.scaledToWidth(
+                desired_size, 
+                Qt.TransformationMode.SmoothTransformation
+            )
             
-            # Update GUI
+            # Update GUI dengan styling baru untuk QR container
+            self.qr_label.setStyleSheet("""
+                QLabel {
+                    background-color: white;
+                    padding: 15px;
+                    border-radius: 10px;
+                }
+            """)
             self.qr_label.setPixmap(pixmap)
             self.unique_id_label.setText(f"Unique ID: {unique_id}")
             self.qr_group.setVisible(True)
