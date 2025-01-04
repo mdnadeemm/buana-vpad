@@ -1,7 +1,7 @@
 import asyncio
 
 import uvicorn
-from src.api import app
+from src.api.app import app
 from src.utils.server_events import server_events
 from src.utils.config import settings
 
@@ -18,7 +18,8 @@ class UvicornServer:
             host=settings.HOST,
             port=settings.PORT,
             reload=False,
-            loop="asyncio"
+            loop="asyncio",
+            lifespan="on"
         )
         
     async def start(self):

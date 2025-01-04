@@ -6,10 +6,10 @@ import qasync
 from src.core.server_model import UvicornServer
 from src.core.remote_server_model import RemoteUvicornServer
 
-def run_app():
+async def run_app():
     try:
         print("Starting application...")
-        app = QApplication(sys.argv)
+        app = QApplication.instance() or QApplication(sys.argv)
         print("Created QApplication")
         
         loop = qasync.QEventLoop(app)
@@ -27,11 +27,16 @@ def run_app():
         
         print("Starting event loop")
         with loop:
-            loop.run_forever()
+            return await loop.run_forever()
             
     except Exception as e:
         print(f"Error: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":
-    run_app()
+    try:
+        asyncio.run(run_app())
+    except KeyboardInterrupt:
+        pass
+    finally:
+        sys.exit(0)
