@@ -26,24 +26,37 @@ class RemoteUvicornServer:
         )
         
     async def start(self):
-        if not self._serve_task:
-            try:
-                self.unique_id = str(uuid.uuid4())
-                self.config = self._create_config()
-                self.server = uvicorn.Server(self.config)
-                self._serve_task = asyncio.create_task(self.server.serve())
-                remote_server_events.emit_remote_server_start(self.unique_id)
-            except Exception as e:
-                remote_server_events.emit_remote_server_error(str(e))
+        # Kalau masih running, stop dulu
+        if self._serve_task and not self._serve_task.done():
+            print("PENDING - Stopping existing server first...")
+            await self.stop(is_pending=True)
+        
+        # Clear state jika ada task yang done/error
+        if self._serve_task and self._serve_task.done():
+            self._serve_task = None
+            self.server = None
+            self.config = None
+            self.unique_id = None
+
+        print("STARTED")
+        try:
+            self.unique_id = str(uuid.uuid4())
+            self.config = self._create_config()
+            self.server = uvicorn.Server(self.config)
+            self._serve_task = asyncio.create_task(self.server.serve())
+            remote_server_events.emit_remote_server_start(self.unique_id)
+        except Exception as e:
+            print("HE")
+            remote_server_events.emit_remote_server_error(str(e))
     
-    async def stop(self):
+    async def stop(self, is_pending=False):
         if self._serve_task:
             try:
                 if self.server:
                     self.server.should_exit = True
                     try:
                         await self.server.shutdown()
-                        await asyncio.sleep(0.5)  # Tambahan delay kecil setelah shutdown
+                        await asyncio.sleep(0.5)
                     except Exception:
                         pass
                         
@@ -64,5 +77,8 @@ class RemoteUvicornServer:
                     self.config = None
                 if hasattr(self, 'unique_id'):
                     self.unique_id = None
-                remote_server_events.emit_remote_server_stop()
-                remote_server_events.emit_remote_log("Remote server stopped")
+                
+                # Hanya emit events jika bukan karena pending
+                if not is_pending:
+                    remote_server_events.emit_remote_server_stop()
+                    remote_server_events.emit_remote_log("Remote server stopped")

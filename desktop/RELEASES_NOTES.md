@@ -1,12 +1,35 @@
-# BuanaVPad Desktop Release
+# BuanaVPad Desktop Release Notes
 
-## What's New
-- Initial release of BuanaVPad Desktop application
+## Version 1.0.1 (Latest)
+
+### What's New
+- Added Remote Server functionality for extended connectivity
+- Implemented QR code scanning for easy device pairing
+- Enhanced connection stability and reliability
+- Added support for multiple concurrent device connections
+- Improved error handling and system logging
+- Optimized application size and performance
+
+## Version 1.0.0
+
+### Core Features
 - Server control interface with start/stop functionality
 - Real-time gamepad monitoring
 - Support for 4 simultaneous controllers
-- Cross-platform connectivity via local network
+- Cross-platform connectivity via local network or remote network
 - Dark theme UI
+
+### Network Features
+- Local network device discovery
+- Remote server connection support
+- Real-time connection status monitoring
+- Secure WebSocket communication
+
+### Technical Features
+- Optimized input processing
+- Comprehensive error handling
+- Debug information panel
+- System tray integration
 
 ## Installation
 1. Download BuanaVPad-Setup.exe
@@ -15,7 +38,20 @@
 
 ## System Requirements
 - Windows 7 or later
-- Local network connection for mobile device connectivity
+- Active network connection (local or internet)
+- 100MB free disk space
+- .NET Framework 4.7.2 or later
 
-## Known Issues
-- Remote Server feature is under development
+## Getting Started
+1. Install BuanaVPad Desktop using the setup wizard
+2. Launch the application
+3. Choose connection mode (local or remote)
+4. Connect your mobile device using QR code or network discovery
+5. Start gaming!
+
+## Support and Feedback
+If you encounter any issues or have suggestions:
+- Create an issue on GitHub
+- Contact us at isa.citra@ui.ac.id
+
+Thank you for choosing BuanaVPad Desktop!

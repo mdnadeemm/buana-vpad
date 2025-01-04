@@ -203,7 +203,8 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
       setState(() => _isConnecting = true);
 
       try {
-        final wsUrl = '$_remoteServerUrl/${_codeController.text}';
+        final wsUrl = '$_remoteServerUrl/ws/${_codeController.text}';
+        print(wsUrl);
         _socket = await WebSocket.connect(wsUrl)
             .timeout(const Duration(seconds: 5), onTimeout: () {
           throw 'Connection timeout. Please check your internet connection.';

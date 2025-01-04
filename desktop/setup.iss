@@ -1,6 +1,6 @@
 ; Definisi dasar aplikasi
 #define MyAppName "BuanaVPad"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "Isa Citra Buana"
 #define MyAppURL "https://github.com/isaui/buana-vpad"
 #define MyAppExeName "BuanaVPad.exe"

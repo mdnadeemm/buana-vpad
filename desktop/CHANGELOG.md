@@ -1,6 +1,19 @@
 # BuanaVPad Desktop Release
 
-## Version 1.0.0
+## Version 1.0.1 (January 4, 2025)
+
+### What's New
+- Added Remote Server functionality
+- Implemented QR code pairing system
+- Enhanced connection stability
+- Added multiple device support through remote server
+- Improved error handling and logging
+- Optimized package dependencies and build size
+
+### Known Issues
+- None reported
+
+## Version 1.0.0 (January 2, 2025)
 
 ### What's New
 - Initial release of BuanaVPad Desktop application
@@ -20,7 +33,8 @@
 - Local network connection for mobile device connectivity
 
 ### Known Issues
-- Remote Server feature is under development
+- Remote Server feature is under development (Fixed in 1.0.1)
 
 ---
-*Released on January 2, 2025*
+
+For support and feedback, please contact us at isa.citra@ui.ac.id

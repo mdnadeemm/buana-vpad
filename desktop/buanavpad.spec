@@ -79,6 +79,8 @@ a = Analysis(
         (os.path.join(venv_path, 'websockets'), 'websockets'),
         (os.path.join(venv_path, 'uvicorn'), 'uvicorn'),
         (os.path.join(venv_path, 'starlette'), 'starlette'),
+        (os.path.join(venv_path, 'qrcode'), 'qrcode'),
+        (os.path.join(venv_path, 'PIL'), 'PIL'),
     ] + additional_datas + all_datas,
     hiddenimports=[
         'qasync',
@@ -102,6 +104,10 @@ a = Analysis(
         'uvicorn.lifespan.on',
         'uvicorn.lifespan.off',
         'starlette.websockets',
+        'qrcode',
+        'PIL',
+        'PIL._imaging',
+        'qrcode.image.PilImage',
     ] + requirements + all_hiddenimports,
     excludes=[
         'matplotlib',
