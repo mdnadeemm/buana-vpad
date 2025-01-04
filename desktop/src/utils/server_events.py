@@ -1,6 +1,5 @@
 from PyQt6.QtCore import QObject, pyqtSignal
 import queue
-from typing import Optional
 
 class ServerEvents(QObject):
     # Define signals

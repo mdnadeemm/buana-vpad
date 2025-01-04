@@ -85,6 +85,8 @@ app.add_middleware(
 async def root():
    return {"status": "running"}
 
+# desktop direct connection
+
 @app.websocket("/ws/controller/{device_id}")
 async def controller_endpoint(websocket: WebSocket, device_id: str):
    await websocket.accept()

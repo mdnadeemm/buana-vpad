@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:buana_vpad/enums/url.dart';
+import 'package:buana_vpad/enums/link.dart';
 import 'package:buana_vpad/screens/connect_page.dart';
 import 'package:buana_vpad/screens/controller_list_page.dart';
 import 'package:buana_vpad/screens/settings_page.dart';
@@ -39,7 +39,7 @@ class HomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Version 1.0.0',
+                'Version 1.0.3',
                 style: TextStyle(
                   color: Colors.grey[400],
                   fontSize: 14,

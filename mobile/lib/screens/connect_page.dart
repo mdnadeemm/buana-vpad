@@ -1,3 +1,4 @@
+import 'package:buana_vpad/screens/connect_to_remote_server_page.dart';
 import 'package:flutter/material.dart';
 import 'package:buana_vpad/screens/connect_to_pc_page.dart';
 
@@ -66,26 +67,14 @@ class ConnectPage extends StatelessWidget {
                     title: 'Server',
                     subtitle: 'Connect through a remote server',
                     icon: Icons.cloud,
-                    onTap: () {
-                      // TODO: Implement server connection
-                    },
-                    label: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.amber[700]?.withOpacity(0.15),
-                      ),
-                      child: Text(
-                        'In Development',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.amber[700],
-                          fontWeight: FontWeight.w500,
+                    onTap: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RemoteServerPage(),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
                 ],
               ),

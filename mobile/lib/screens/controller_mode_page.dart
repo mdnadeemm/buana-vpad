@@ -104,7 +104,8 @@ class _ControllerModePageState extends State<ControllerModePage> {
       widget.socket.add(jsonEncode({
         "type": "connect",
         "device_id": widget.deviceId,
-        "device_name": widget.deviceName
+        "device_name": widget.deviceName,
+        "device_type": "mobile"
       }));
     } catch (e) {
       print('Failed to send initial connect: $e');
@@ -117,7 +118,7 @@ class _ControllerModePageState extends State<ControllerModePage> {
       if (mounted && isConnectedNotifier.value) {
         try {
           widget.socket
-              .add(jsonEncode({"type": "ping", "device_id": widget.deviceId}));
+              .add(jsonEncode({"type": "ping", "device_id": widget.deviceId, "device_type": "mobile"}));
         } catch (e) {
           print('Ping error: $e');
           timer.cancel();
@@ -137,6 +138,8 @@ class _ControllerModePageState extends State<ControllerModePage> {
           widget.onConnect();
         } else if (data["type"] == "pong") {
           isConnectedNotifier.value = true;
+        } else if(data["type"] == "pc_disconnected"){
+          widget.onDisconnect();
         }
       },
       onDone: _handleDisconnect,
