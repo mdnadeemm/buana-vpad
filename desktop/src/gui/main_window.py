@@ -8,7 +8,10 @@ from PyQt6.QtGui import QIcon
 from src.gui.components.author_tab import AuthorTab
 from src.gui.components.server_tab import ServerControlTab
 from src.gui.components.monitor_tab import ConnectionsMonitorTab
+from src.gui.components.remote_server_tab import RemoteServerTab
+from src.gui.components.remote_monitor_tab import RemoteConnectionsMonitorTab
 from src.utils.server_events import server_events
+from src.utils.remote_server_events import remote_server_events
 import asyncio
 import os
 import sys
@@ -16,7 +19,6 @@ import sys
 def get_resource_path(relative_path):
     """Get absolute path to resource, works for dev and for PyInstaller"""
     try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
         base_path = sys._MEIPASS
     except Exception:
         base_path = os.path.abspath(".")
@@ -55,9 +57,10 @@ class DarkTabWidget(QTabWidget):
         """)
 
 class MainWindow(QMainWindow):
-    def __init__(self, server):
+    def __init__(self, local_server, remote_server):
         super().__init__()
-        self.server = server
+        self.local_server = local_server
+        self.remote_server = remote_server
         self.is_closing = False
         self.init_ui()
         self.setup_styles()
@@ -84,26 +87,22 @@ class MainWindow(QMainWindow):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
         
+        # Initialize tabs container
         tabs = DarkTabWidget()
         layout.addWidget(tabs)
         
+        # Initialize all tabs
         self.server_tab = ServerControlTab(self)
         self.monitor_tab = ConnectionsMonitorTab()
+        self.remote_tab = RemoteServerTab(self)
+        self.remote_monitor_tab = RemoteConnectionsMonitorTab()
         self.author_tab = AuthorTab()
         
-        tabs.addTab(self.server_tab, "Server Control")
-        tabs.addTab(self.monitor_tab, "Gamepad Monitor")
-        
-        remote_tab = QWidget()
-        remote_label = QLabel("🚧 Under Development 🚧")
-        remote_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        remote_label.setStyleSheet("color: #666666; font-style: italic;")
-        remote_layout = QVBoxLayout(remote_tab)
-        remote_layout.addWidget(remote_label)
-        
-        remote_server_tab_index = tabs.addTab(remote_tab, "Remote Server [under development]")
-        tabs.setTabEnabled(remote_server_tab_index, False)
-    
+        # Add all tabs
+        tabs.addTab(self.server_tab, "Local Server Control")
+        tabs.addTab(self.monitor_tab, "Local Gamepad Monitor")
+        tabs.addTab(self.remote_tab, "Remote Server Control")
+        tabs.addTab(self.remote_monitor_tab, "Remote Gamepad Monitor")
         tabs.addTab(self.author_tab, "Author")
 
     def setup_styles(self):
@@ -134,9 +133,6 @@ class MainWindow(QMainWindow):
             QMessageBox QPushButton:hover {
                 background-color: #3d3d3d;
             }
-            QMessageBox QPushButton:pressed {
-                background-color: #404040;
-            }
             QScrollBar:vertical {
                 background-color: #1a1a1a;
                 width: 12px;
@@ -160,13 +156,18 @@ class MainWindow(QMainWindow):
         """)
 
     def connect_events(self):
+        # Local server events
         server_events.server_error.connect(self.handle_server_error)
+        # Remote server events
+        remote_server_events.remote_server_error.connect(self.handle_remote_server_error)
 
     async def cleanup(self):
         """Cleanup resources before closing"""
-        if hasattr(self.server_tab, 'server_running') and self.server_tab.server_running:
+        if self.server_tab.server_running:
             await self.stop_server()
-            await asyncio.sleep(1)
+        if hasattr(self.remote_tab, 'server_running') and self.remote_tab.server_running:
+            await self.stop_remote_server()
+        await asyncio.sleep(1)
 
     def closeEvent(self, event):
         """Handle application closing"""
@@ -174,10 +175,11 @@ class MainWindow(QMainWindow):
             event.accept()
             return
 
-        if hasattr(self.server_tab, 'server_running') and self.server_tab.server_running:
+        if (hasattr(self.server_tab, 'server_running') and self.server_tab.server_running) or \
+           (hasattr(self.remote_tab, 'server_running') and self.remote_tab.server_running):
             reply = QMessageBox()
             reply.setWindowTitle("Confirm Exit")
-            reply.setText("Server is still running. Are you sure you want to exit?")
+            reply.setText("One or more servers are still running. Are you sure you want to exit?")
             reply.setStandardButtons(
                 QMessageBox.StandardButton.Yes | 
                 QMessageBox.StandardButton.No
@@ -207,10 +209,17 @@ class MainWindow(QMainWindow):
 
     def _final_close(self):
         try:
-            if hasattr(self, 'server') and self.server:
-                self.server.server = None
-                self.server._serve_task = None
-                self.server = None
+            # Cleanup local server
+            if hasattr(self, 'local_server') and self.local_server:
+                self.local_server.server = None
+                self.local_server._serve_task = None
+                self.local_server = None
+            
+            # Cleanup remote server
+            if hasattr(self, 'remote_server') and self.remote_server:
+                self.remote_server.server = None
+                self.remote_server._serve_task = None
+                self.remote_server = None
             
             self.close()
             
@@ -222,19 +231,8 @@ class MainWindow(QMainWindow):
         except Exception as e:
             print(f"Error during final close: {e}")
             sys.exit(1)
-            
-    async def start_server(self):
-        try:
-            await self.server.start()
-        except Exception as e:
-            server_events.emit_server_error(str(e))
-            
-    async def stop_server(self):
-        try:
-            await self.server.stop()
-        except Exception as e:
-            server_events.emit_server_error(str(e))
-            
+
+    # Error handlers
     def handle_server_error(self, error: str):
         msg = QMessageBox(self)
         msg.setIcon(QMessageBox.Icon.Critical)
@@ -265,3 +263,60 @@ class MainWindow(QMainWindow):
             }
         """)
         msg.exec()
+
+    def handle_remote_server_error(self, error: str):
+        msg = QMessageBox(self)
+        msg.setIcon(QMessageBox.Icon.Critical)
+        msg.setWindowTitle("Remote Server Error")
+        msg.setText("Remote server error occurred:")
+        msg.setInformativeText(error)
+        msg.setStandardButtons(QMessageBox.StandardButton.Ok)
+        msg.setStyleSheet("""
+            QMessageBox {
+                background-color: #1a1a1a;
+            }
+            QLabel {
+                color: #ffffff;
+                padding: 10px;
+                font-size: 14px;
+            }
+            QPushButton {
+                background-color: #802020;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 5px;
+                color: white;
+                font-weight: bold;
+                min-width: 80px;
+            }
+            QPushButton:hover {
+                background-color: #993333;
+            }
+        """)
+        msg.exec()
+
+    # Server control methods
+    async def start_server(self):
+        try:
+            await self.local_server.start()
+        except Exception as e:
+            server_events.emit_server_error(str(e))
+
+    async def stop_server(self):
+        try:
+            await self.local_server.stop()
+        except Exception as e:
+            server_events.emit_server_error(str(e))
+
+    async def start_remote_server(self):
+        try:
+            print("here")
+            await self.remote_server.start()
+        except Exception as e:
+            remote_server_events.emit_remote_server_error(str(e))
+
+    async def stop_remote_server(self):
+        try:
+            await self.remote_server.stop()
+        except Exception as e:
+            remote_server_events.emit_remote_server_error(str(e))

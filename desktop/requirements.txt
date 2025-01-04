@@ -9,3 +9,4 @@ vgamepad>=0.0.8
 psutil
 qasync
 PyQt6-sip
+qrcode[pil]

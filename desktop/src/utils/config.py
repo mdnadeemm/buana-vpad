@@ -5,6 +5,8 @@ class Settings(BaseSettings):
     BROADCAST_PORT: int = 8081
     DEBUG: bool = True
     HOST: str = "0.0.0.0"
-    PORT: int = 8000
+    PORT: int = 8058
+    REMOTE_SERVER: str = "localhost:8000"
+    REMOTE_LOCAL_PORT: int = 8052
 
 settings = Settings()

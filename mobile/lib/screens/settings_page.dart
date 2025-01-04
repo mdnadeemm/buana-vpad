@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:buana_vpad/database/db_helper.dart';
-import 'package:buana_vpad/enums/url.dart';
+import 'package:buana_vpad/enums/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:buana_vpad/utils/settings_manager.dart';
 
