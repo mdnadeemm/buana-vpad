@@ -1,9 +1,8 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from src.utils.config import settings
 from typing import Dict
 
-app = FastAPI(title=settings.APP_NAME)
+app = FastAPI(title="Vpad Remote Server")
 
 app.add_middleware(
     CORSMiddleware,
