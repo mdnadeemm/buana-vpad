@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5] - 2024-01-05
+### Fixed
+- Fixed duplicate WebSocket listener issues when navigating between connection and gamepad pages
+- Improved socket connection management by centralizing broadcast stream handling
+- Enhanced connection stability during gamepad navigation
+- Optimized socket cleanup and reconnection logic
+
+## [1.0.4] - 2024-01-05
+### Added
+- Automatic navigation to gamepad mode after successful network scan or QR code connection
+- "Return to Gamepad" button accessibility while connection is active
+
 ## [1.0.3] - 2024-01-04
 ### Added
 - Remote server functionality
@@ -61,4 +73,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Minimum SDK version: Android 6.0 (API level 23)
 - Target SDK version: Android 13 (API level 33)  
 - Network protocol: WebSocket
-

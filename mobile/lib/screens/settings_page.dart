@@ -286,7 +286,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 _buildListTile(
                   title: 'Version',
-                  subtitle: 'v1.0.4',
+                  subtitle: 'v1.0.5',
                 ),
               ],
             ),
