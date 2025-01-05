@@ -17,6 +17,7 @@ class ControllerModePage extends StatefulWidget {
   final String deviceId;
   final VoidCallback onConnect;
   final VoidCallback onDisconnect;
+  final Stream<dynamic> broadcastStream; 
 
   const ControllerModePage({
     super.key,
@@ -26,6 +27,7 @@ class ControllerModePage extends StatefulWidget {
     required this.deviceName,
     required this.onConnect,
     required this.onDisconnect,
+    required this.broadcastStream
   });
 
   @override
@@ -50,7 +52,6 @@ class _ControllerModePageState extends State<ControllerModePage> {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
-
     // Initialize state notifiers
     leftJoystickNotifier = ValueNotifier(JoystickState(
       dx: 0, dy: 0, intensity: 0, angle: 0, isPressed: false
@@ -131,7 +132,7 @@ class _ControllerModePageState extends State<ControllerModePage> {
   }
 
   void _setupSocketListener() {
-    _socketSubscription = widget.socket.listen(
+    _socketSubscription = widget.broadcastStream.listen(
       (message) {
         final data = jsonDecode(message);
         if (data["type"] == "connect_success") {
@@ -150,14 +151,15 @@ class _ControllerModePageState extends State<ControllerModePage> {
           );
           // Then trigger disconnect
           widget.onDisconnect();
-        }
-      },
-      onDone: _handleDisconnect,
-      onError: (error) {
-        print('Socket error: $error');
-        _handleDisconnect();
-      },
+      }
+    },
+    onDone: _handleDisconnect,
+    onError: (error) {
+      print('Socket error: $error');
+      _handleDisconnect();
+    },
     );
+
   }
 
   void _handleDisconnect() {

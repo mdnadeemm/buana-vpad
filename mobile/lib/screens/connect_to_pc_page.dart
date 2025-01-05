@@ -20,7 +20,6 @@ class _ConnectToPcPageState extends State<ConnectToPcPage> {
   final _ipController = TextEditingController();
   final _portController = TextEditingController(text: '8080');
   final _networkScanner = NetworkScanner();
-
   bool _isLoading = true;
   bool _isConnecting = false;
   bool _isConnected = false;
@@ -30,6 +29,7 @@ class _ConnectToPcPageState extends State<ConnectToPcPage> {
   ControllerLayout? _selectedLayout;
   List<PCDevice> _discoveredDevices = [];
   StreamSubscription? _scanSubscription;
+  Stream<dynamic>? _broadcastStream;  
   String? _deviceId;
   String? _deviceName;
 
@@ -235,11 +235,14 @@ class _ConnectToPcPageState extends State<ConnectToPcPage> {
           throw 'Connection timeout. Please check if the IP and port are correct.';
         });
 
+        _broadcastStream = _socket?.asBroadcastStream();
+
         if (mounted) {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ControllerModePage(
+                broadcastStream: _broadcastStream!,
                 layout: _selectedLayout!,
                 socket: _socket!,
                 deviceId: _deviceId!,
@@ -333,6 +336,7 @@ class _ConnectToPcPageState extends State<ConnectToPcPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ControllerModePage(
+                                  broadcastStream: _broadcastStream!,
                                   layout: _selectedLayout!,
                                   socket: _socket!,
                                   deviceId: _deviceId!,

@@ -28,6 +28,7 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
   ControllerLayout? _selectedLayout;
   String? _deviceId;
   String? _deviceName;
+  Stream<dynamic>? _broadcastStream;  
   final _remoteServerUrl = Link.remoteServer.path;
 
   @override
@@ -212,11 +213,14 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
           throw 'Connection timeout. Please check your internet connection.';
         });
 
+        _broadcastStream = _socket?.asBroadcastStream();
+
         if (mounted) {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ControllerModePage(
+                broadcastStream: _broadcastStream!,
                 layout: _selectedLayout!,
                 socket: _socket!,
                 deviceId: _deviceId!,
@@ -309,6 +313,7 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
                               MaterialPageRoute(
                                 builder: (context) => ControllerModePage(
                                   layout: _selectedLayout!,
+                                  broadcastStream: _broadcastStream!,
                                   socket: _socket!,
                                   deviceId: _deviceId!,
                                   deviceName: _deviceName ?? 'Unknown Device',
