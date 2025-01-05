@@ -39,7 +39,7 @@ class HomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Version 1.0.4',
+                'Version 1.0.5',
                 style: TextStyle(
                   color: Colors.grey[400],
                   fontSize: 14,
