@@ -116,6 +116,7 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
                         _codeController.text = barcode.rawValue!;
                       });
                       Navigator.pop(context);
+                      _connect();
                       break;
                     }
                   }
@@ -143,6 +144,7 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
             setState(() {
               _codeController.text = firstBarcode.rawValue!;
             });
+            _connect();
           }
         } else {
           if (mounted) {
@@ -289,6 +291,43 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
             ? const Center(child: CircularProgressIndicator())
             : Column(
                 children: [
+                  if (_isConnected) 
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.all(16),
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.gamepad),
+                        label: const Text('Back to Gamepad'),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(16),
+                          backgroundColor: Colors.blue,
+                        ),
+                        onPressed: () {
+                          if (_socket != null && _selectedLayout != null && _deviceId != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ControllerModePage(
+                                  layout: _selectedLayout!,
+                                  socket: _socket!,
+                                  deviceId: _deviceId!,
+                                  deviceName: _deviceName ?? 'Unknown Device',
+                                  onConnect: () {
+                                    setState(() {
+                                      _isConnecting = false;
+                                      _isConnected = true;
+                                    });
+                                  },
+                                  onDisconnect: () {
+                                    _disconnect();
+                                  },
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
                   Expanded(
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.all(24),
@@ -297,7 +336,6 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Connection Status
                             Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
@@ -330,8 +368,6 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
                               ),
                             ),
                             const SizedBox(height: 32),
-
-                            // QR Code Options
                             Container(
                               width: double.infinity,
                               padding: const EdgeInsets.all(16),
@@ -341,7 +377,6 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
                               ),
                               child: Column(
                                 children: [
-                                  // Scan QR Button
                                   InkWell(
                                     onTap: _isConnected ? null : _showQRScanner,
                                     child: Padding(
@@ -375,7 +410,6 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
                                     ),
                                   ),
                                   const Divider(color: Colors.grey),
-                                  // Upload QR Button
                                   InkWell(
                                     onTap: _isConnected ? null : _uploadQRCode,
                                     child: Padding(
@@ -412,8 +446,6 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
                               ),
                             ),
                             const SizedBox(height: 24),
-
-                            // Manual Code Input
                             Text(
                               'Or enter code manually',
                               style: TextStyle(
@@ -446,8 +478,6 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
                               validator: _validateCode,
                             ),
                             const SizedBox(height: 24),
-
-                            // Controller Layout Selection
                             if (_layouts.isEmpty)
                               Container(
                                 padding: const EdgeInsets.all(16),
@@ -521,8 +551,6 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
                                   ),
                                 ],
                               ),
-
-                            // Connection Info
                             const SizedBox(height: 32),
                             Container(
                               padding: const EdgeInsets.all(16),
@@ -546,15 +574,15 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
                                   ),
                                   const SizedBox(height: 12),
                                   _buildInfoPoint(
-                                    '1. Open Buana VPad on your PC',
+                                    '1. Open Buana VPad Desktop App on your PC',
                                     Icons.computer,
                                   ),
                                   _buildInfoPoint(
-                                    '2. Click "Remote Connection" and get the QR code',
+                                    '2. Click "Remote Server Control" and get the QR code',
                                     Icons.qr_code,
                                   ),
                                   _buildInfoPoint(
-                                    '3. Scan/Upload QR code or enter the code manually on the mobile app',
+                                    '3. Scan/Upload QR code or enter the code manually on the Buana Vpad mobile app',
                                     Icons.input,
                                   ),
                                 ],
@@ -565,7 +593,6 @@ class _RemoteServerPageState extends State<RemoteServerPage> {
                       ),
                     ),
                   ),
-                  // Fixed Connect Button at bottom
                   Container(
                     padding: EdgeInsets.only(
                       left: 24,

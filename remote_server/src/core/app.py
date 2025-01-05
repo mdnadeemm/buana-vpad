@@ -51,14 +51,21 @@ async def websocket_endpoint(websocket: WebSocket, unique_id: str):
                 })
         # Handle mobile connection
         else:
-            # Send connect message to PC
+            # Send error if no PC connected, but continue with normal flow
+            if not connections[unique_id]["pc"]:
+                await websocket.send_json({
+                    "type": "error",
+                    "message": "No PC connected. Please connect to PC first."
+                })
+                
+            # Send connect message to PC if it exists
             if connections[unique_id]["pc"]:
                 await connections[unique_id]["pc"].send_json({
                     "type": "connect",
                     "device_id": device_id,
                     "device_name": device_name
                 })
-                connections[unique_id]["mobile"][device_id] = websocket
+            connections[unique_id]["mobile"][device_id] = websocket
 
         while True:
             data = await websocket.receive_json()
