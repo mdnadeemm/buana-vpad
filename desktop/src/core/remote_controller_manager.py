@@ -59,19 +59,18 @@ class RemoteControllerManager:
                 self._handle_button(gamepad, button_id, state)
 
             # Handle joysticks
-            left_joy = data.get("leftJoystickState")
-            right_joy = data.get("rightJoystickState")
-            if left_joy and (left_joy.get("dx") != 0 or left_joy.get("dy") != 0):
-                gamepad.left_joystick_float(
-                    x_value_float=left_joy.get("dx", 0.0),
-                    y_value_float=-left_joy.get("dy", 0.0)  # Invert Y axis
-                )
-            if right_joy and (right_joy.get("dx") != 0 or right_joy.get("dy") != 0):
-                gamepad.right_joystick_float(
-                    x_value_float=right_joy.get("dx", 0.0),
-                    y_value_float=-right_joy.get("dy", 0.0)  # Invert Y axis
-                )
-
+            # Pastikan nilai default 0 jika tidak ada input
+            left_joy = data.get("leftJoystickState", {"dx": 0.0, "dy": 0.0})
+            right_joy = data.get("rightJoystickState", {"dx": 0.0, "dy": 0.0})
+            gamepad.left_joystick_float(
+                x_value_float=left_joy.get("dx", 0.0),
+                y_value_float=-left_joy.get("dy", 0.0)  # Invert Y axis
+            )
+            
+            gamepad.right_joystick_float(
+                x_value_float=right_joy.get("dx", 0.0),
+                y_value_float=-right_joy.get("dy", 0.0)  # Invert Y axis
+            )
             # Handle DPAD
             dpad = data.get("dpadState", {})
             self._handle_dpad(gamepad, dpad)

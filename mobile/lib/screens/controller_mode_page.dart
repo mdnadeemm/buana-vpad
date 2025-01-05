@@ -140,6 +140,16 @@ class _ControllerModePageState extends State<ControllerModePage> {
           isConnectedNotifier.value = true;
         } else if(data["type"] == "pc_disconnected"){
           widget.onDisconnect();
+        } else if(data["type"] == "error") {
+          // Show error message first
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(data["message"] ?? "Unknown error occurred"),
+              backgroundColor: Colors.red,
+            ),
+          );
+          // Then trigger disconnect
+          widget.onDisconnect();
         }
       },
       onDone: _handleDisconnect,

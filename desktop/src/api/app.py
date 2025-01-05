@@ -57,6 +57,7 @@ async def lifespan(app: FastAPI):
 async def broadcast_presence():
    global udp_sockets, is_broadcasting
    message = f"{settings.APP_NAME}|{settings.PORT}|{DEVICE_ID}"
+   print("HELLO MEN AYOLAH")
 
    while is_broadcasting:
        try:

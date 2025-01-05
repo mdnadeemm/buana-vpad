@@ -1,7 +1,14 @@
 # BuanaVPad Desktop Release Notes
 
-## Version 1.0.1 (Latest)
+## Version 1.0.2 (Latest)
+### Bug Fixes & Improvements
+- Fixed joystick drift issue where input would get stuck in one direction
+- Improved input processing performance for smoother gameplay
+- Optimized network communication to reduce latency
+- Enhanced system logging for better diagnostics
+- Various stability improvements
 
+## Version 1.0.1
 ### What's New
 - Added Remote Server functionality for extended connectivity
 - Implemented QR code scanning for easy device pairing
@@ -11,7 +18,6 @@
 - Optimized application size and performance
 
 ## Version 1.0.0
-
 ### Core Features
 - Server control interface with start/stop functionality
 - Real-time gamepad monitoring

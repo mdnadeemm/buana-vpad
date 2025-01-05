@@ -1,5 +1,17 @@
 # BuanaVPad Desktop Release
 
+## Version 1.0.2 (January 5, 2025)
+
+### What's New
+- Fixed joystick drift issue when input gets stuck
+- Improved input processing for smoother gameplay
+- Optimized network communication latency
+- Enhanced system logging for better diagnostics
+- Various stability improvements
+
+### Known Issues
+- None reported
+
 ## Version 1.0.1 (January 4, 2025)
 
 ### What's New
