@@ -51,7 +51,7 @@ We may update this Privacy Policy periodically. Any changes will be reflected wi
 
 ## Contact
 For privacy concerns or questions, contact:
-[Your Contact Information]
+isa.citra@ui.ac.id
 
 ## Consent
 By using Buana VPad, you consent to this Privacy Policy and our handling of permissions as described above.

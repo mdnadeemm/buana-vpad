@@ -15,6 +15,9 @@
         android:label="Buana VPad"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="privacy_policy_url"
+            android:value="https://github.com/isaui/buana-vpad/blob/main/mobile/PRIVACY_POLICY.md" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
