@@ -101,6 +101,8 @@ class ControllerManager:
             'RB': vg.XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER,
             'Start': vg.XUSB_BUTTON.XUSB_GAMEPAD_START,
             'Select': vg.XUSB_BUTTON.XUSB_GAMEPAD_BACK,
+            'LS': vg.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_THUMB,
+            'RS': vg.XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_THUMB,
         }
 
         # Handle regular buttons
