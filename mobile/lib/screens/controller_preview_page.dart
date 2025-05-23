@@ -406,6 +406,26 @@ void didChangeDependencies() {
       width: screenSize.width,
       height: screenSize.height,
       buttons: {
+
+         // LS (Left Stick Button) - Beside Left Joystick
+'LS': ButtonLayout(
+  id: 'LS',
+  x: layoutPercentage.getAbsoluteX(getZone('leftSide') - getMainButtonSize('spacing') * 1.2),
+  y: layoutPercentage.getAbsoluteY(getVerticalZone('mainButtonY') + getJoystickSize() * 0.25),
+  width: layoutPercentage.getAbsoluteSize(getMainButtonSize('size') * 0.8),
+  label: 'LS',
+  shape: ButtonShape.circle,
+),
+
+// RS (Right Stick Button) - Beside Right Joystick
+'RS': ButtonLayout(
+  id: 'RS',
+  x: layoutPercentage.getAbsoluteX(getZone('rightSide') + getJoystickSize() * 0.2),
+  y: layoutPercentage.getAbsoluteY(getVerticalZone('secondaryY') + getJoystickSize() * 0.1),
+  width: layoutPercentage.getAbsoluteSize(getMainButtonSize('size') * 0.8),
+  label: 'RS',
+  shape: ButtonShape.circle,
+),
         // Face buttons (ABXY)
         'A': ButtonLayout(
           id: 'A',
