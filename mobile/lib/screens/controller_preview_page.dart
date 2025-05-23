@@ -104,8 +104,12 @@ void didChangeDependencies() {
       'RB': ButtonState(isPressed: false, value: 0, id: 'RB'),
       'LT': ButtonState(isPressed: false, value: 0, id: 'LT'),
       'RT': ButtonState(isPressed: false, value: 0, id: 'RT'),
+      
       'Start': ButtonState(isPressed: false, value: 0, id: 'Start'),
       'Select': ButtonState(isPressed: false, value: 0, id: 'Select'),
+      'LS': ButtonState(isPressed: false, value: 0, id: 'LS'),
+      'RS': ButtonState(isPressed: false, value: 0, id: 'RS'),
+      
     };
   }
 
